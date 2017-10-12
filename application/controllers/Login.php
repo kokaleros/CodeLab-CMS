@@ -62,68 +62,94 @@ Class Login extends CLCMS_Controller {
         }
 
         $rules = array(
-
             "name" =>
                 array(
                     "field" => "name",
+                    "label" => "ime",
                     "rules" => "required|min_length[5]|max_length[100]"
                 ),
             "username" =>
                 array(
                     "field" => "username",
-                    "rules" => "required|max_length[20]|min_length[5]|callback_username_exist"
+                    "label" => "korisničko ime",
+                    "rules" => "required|min_length[4]|max_length[20]|callback_username_exist"
+                ),
+            "email" =>
+                array(
+                    "field" => "email",
+                    "label" => "email",
+                    "rules" => "required|min_length[7]|max_length[100]|valid_email|callback_email_exist"
                 ),
             "password" =>
                 array(
                     "field" => "password",
                     "label" => "lozinka",
-                    "rules" => "required|max_length[20]|min_length[5]"
+                    "rules" => "required|min_length[6]|max_length[32]"
                 ),
             "password_conf" =>
                 array(
                     "field" => "password_conf",
-                    "label" => "potvrdi lozinku",
-                    "rules" => "required|max_length[20]|min_length[5]|matches[password]"
+                    "label" => "ponovi lozinku",
+                    "rules" => "required|min_length[6]|max_length[32]|matches[password]"
                 ),
-            "email" =>
+
+            //additional fields that are not required
+
+             "telephone" =>
                 array(
-                    "field" => "email",
-                    "rules" => "required|max_length[100]|min_length[8]|valid_email|callback_email_exist"
+                    "field" => "telephone",
+                    "label" => "Telefon",
+                    "rules" => "max_length[25]"
+                ),
+            "address" =>
+                array(
+                    "field" => "address",
+                    "label" => "Adresa",
+                    "rules" => "max_length[100]"
+                ),
+            "city" =>
+                array(
+                    "field" => "telephone",
+                    "label" => "Telefon",
+                    "rules" => "max_length[100]"
+                ),
+            "country" =>
+                array(
+                    "field" => "country",
+                    "label" => "Drzava",
+                    "rules" => "max_length[100]"
+                ),
+            "zip_code" =>
+                array(
+                    "field" => "zip_code",
+                    "label" => "Postanski broj",
+                    "rules" => "max_length[10]"
                 )
         );
 
+
         $this->form_validation->set_rules($rules);
 
-        //messages
-        $this->form_validation->set_message('required','Ovo polje je obavezno!');
-        $this->form_validation->set_message('min_lenght','Premalo karaktera!');
-        $this->form_validation->set_message('max_length','Previse karaktera!');
-
-
-
-        if($this->form_validation->run() != true){
-            $this->load->view("layouts/register");
+        if( $this->form_validation->run() != true ){
+            $this->load->view('parts/login/register-header');
+            $this->load->view('layouts/register-page');
         }else{
-            echo "valja";
+            //provjeri pristupne podatke
+            $postData = $this->input->post();
+
+            //unset password confirmation field
+            unset($postData["password_conf"]);
+
+            //load login model
+            $this->load->model("User");
+            $user = $this->User->create($postData);
+
+            if(!$user){
+                die('User isnt created!');
+            }else{
+                die("User created with id: " . $user);
+            }
         }
-
-//        $userData = array(
-//            "name"          => "Igor Karanovic",
-//            "username"      => "kokaleros",
-//            "password"      => "admin",
-//            "email"         => "igor@newmoment.ba",
-//            "telephone"     => "065224000",
-//            "address"       => "Vojvode Momcila 14",
-//            "city"          => "Banja Luka",
-//            "country"       => "BiH",
-//            "zip_code"      => 78000
-//        );
-
-        //load login model
-        $this->load->model("User");
-
-
-
 
 
     }

@@ -25,12 +25,13 @@ Class User extends CI_Model{
         $data["created"] = time();
         $data["active"]  = false;
 
+        $data["password"] = md5($data["password"]);
+
         //insert into database
         if( $user = $this->db->insert('users', $data))
         {
             return $this->db->insert_id();
         }else{
-            echo "Nije ubaceno!";
             return false;
         }
 
