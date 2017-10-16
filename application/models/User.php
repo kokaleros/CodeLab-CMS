@@ -25,6 +25,9 @@ Class User extends CI_Model{
         $data["created"] = time();
         $data["active"]  = false;
 
+        //create secretCode | username + secret-code + created
+        $data["secret"] = md5($data["username"] . "secret-code" . $data["created"]);
+
         $data["password"] = md5($data["password"]);
 
         //insert into database
@@ -34,9 +37,6 @@ Class User extends CI_Model{
         }else{
             return false;
         }
-
-
-        var_dump($data);
     }
 
     public function user_exist($username = "",$email = ""){
@@ -73,6 +73,22 @@ Class User extends CI_Model{
         }
     }
 
+    public function activate_user($secret_key){
+        if(!$this->get_user_by_secret_key($secret_key)){
+            return false;
+        }
+
+        $this->db->set('active', 1);
+        $this->db->where('secret', $secret_key);
+        $this->db->update($this->user_table);
+    }
+
+    public function get_user_by_secret_key($secret_key){
+        $this->db->where('secret',$secret_key);
+        $result = $this->db->get($this->user_table);
+
+        return $result->num_rows() == 1 ? true : false;
+    }
 
     //custom functions -------------------------------------------------------------
 

@@ -41,6 +41,10 @@ $password_field = array(
 
                     <div class="panel panel-body login-form">
                         <div class="text-center">
+                            <?php echo $this->session->flashdata('message'); ?>
+                        </div>
+
+                        <div class="text-center">
                             <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
                             <h5 class="content-group">Prijava na sistem <small class="display-block">Unesite vaše pristupne podatke</small></h5>
                         </div>

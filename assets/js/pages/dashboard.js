@@ -524,7 +524,7 @@ $(function() {
                 return "<ul class='list-unstyled mb-5'>" +
                     "<li>" + "<div class='text-size-base mt-5 mb-5'><i class='icon-circle-left2 position-left'></i>" + d.name + " app" + "</div>" + "</li>" +
                     "<li>" + "Sales: &nbsp;" + "<span class='text-semibold pull-right'>" + d.value + "</span>" + "</li>" +
-                    "<li>" + "Revenue: &nbsp; " + "<span class='text-semibold pull-right'>" + "$" + (d.value * 25).toFixed(2) + "</span>" + "</li>" + 
+                    "<li>" + "Revenue: &nbsp; " + "<span class='text-semibold pull-right'>" + "$" + (d.value * 25).toFixed(2) + "</span>" + "</li>" +
                 "</ul>";
             });
 
@@ -595,8 +595,8 @@ $(function() {
         d3.select(window)
             .on("keydown", function() { altKey = d3.event.altKey; })
             .on("keyup", function() { altKey = false; });
-    
-        // Set terms of transition on date change   
+
+        // Set terms of transition on date change
         function change() {
           d3.transition()
               .duration(altKey ? 7500 : 500)
@@ -608,7 +608,7 @@ $(function() {
         // Main chart drawing function
         // ------------------------------
 
-        function redraw() { 
+        function redraw() {
 
             // Construct chart layout
             // ------------------------------
@@ -617,15 +617,15 @@ $(function() {
             var nested = d3.nest()
                 .key(function(d) { return d.type; })
                 .map(formatted)
-            
+
             // Get value from menu selection
             // the option values correspond
-            //to the [type] value we used to nest the data  
+            //to the [type] value we used to nest the data
             var series = menu.val();
-            
+
             // Only retrieve data from the selected series using nest
             var data = nested[series];
-            
+
             // For object constancy we will need to set "keys", one for each type of data (column name) exclude all others.
             color.domain(d3.keys(data[0]).filter(function(key) { return (key !== "date" && key !== "type"); }));
 
@@ -687,7 +687,7 @@ $(function() {
                 .ticks(6)
                 .tickSize(0 -width)
                 .tickPadding(8);
-            
+
 
 
             //
@@ -714,7 +714,7 @@ $(function() {
             // Bind the data
             var lines = svg.selectAll(".lines")
                 .data(linedata)
-         
+
             // Append a group tag for each line
             var lineGroup = lines
                 .enter()
@@ -732,7 +732,7 @@ $(function() {
                     .duration(500)
                     .delay(function(d, i) { return i * 200; })
                     .style('opacity', 1);
-          
+
 
 
             // Append circles
@@ -779,7 +779,7 @@ $(function() {
 
             // Change tooltip direction of first point
             // to always keep it inside chart, useful on mobiles
-            lines.each(function (d) { 
+            lines.each(function (d) {
                 d3.select(d3.select(this).selectAll('circle')[0][0])
                     .on("mouseover", function (d) {
                         tooltip.offset([0, 15]).direction('e').show(d);
@@ -797,7 +797,7 @@ $(function() {
 
             // Change tooltip direction of last point
             // to always keep it inside chart, useful on mobiles
-            lines.each(function (d) { 
+            lines.each(function (d) {
                 d3.select(d3.select(this).selectAll('circle')[0][d3.select(this).selectAll('circle').size() - 1])
                     .on("mouseover", function (d) {
                         tooltip.offset([0, -15]).direction('w').show(d);
@@ -820,7 +820,7 @@ $(function() {
 
             // Set variable for updating visualization
             var lineUpdate = d3.transition(lines);
-            
+
             // Update lines
             lineUpdate.select("path")
                 .attr("d", function(d, i) { return line(d.values); });
@@ -833,7 +833,7 @@ $(function() {
             // Update vertical axes
             d3.transition(svg)
                 .select(".d3-axis-vertical")
-                .call(yAxis);   
+                .call(yAxis);
 
             // Update horizontal axes
             d3.transition(svg)
@@ -853,9 +853,9 @@ $(function() {
             $(document).on('click', '.sidebar-control', appSalesResize);
 
             // Resize function
-            // 
+            //
             // Since D3 doesn't support SVG resize by default,
-            // we need to manually specify parts of the graph that need to 
+            // we need to manually specify parts of the graph that need to
             // be updated on window resize
             function appSalesResize() {
 
@@ -926,7 +926,7 @@ $(function() {
                 formatTime = d3.time.format("%H:%M");
 
             // Pull out values
-            data.forEach(function(d, i) { 
+            data.forEach(function(d, i) {
                 d.date = format.parse(d.date),
                 d.value = +d.value
             });
@@ -1042,7 +1042,7 @@ $(function() {
                     .style('cursor', 'pointer')
                     .style('shape-rendering', 'crispEdges');
 
-            // Add loading transition    
+            // Add loading transition
             heatMap.transition()
                 .duration(250)
                 .delay(function(d, i) { return i * 20; })
@@ -1068,7 +1068,7 @@ $(function() {
 
             // Get min and max values
             var minValue, maxValue;
-            data.forEach(function(d, i) { 
+            data.forEach(function(d, i) {
                 maxValue = d3.max(data, function (d) { return d.value; });
                 minValue = d3.min(data, function (d) { return d.value; });
             });
@@ -1128,9 +1128,9 @@ $(function() {
             $(document).on('click', '.sidebar-control', resizeHeatmap);
 
             // Resize function
-            // 
+            //
             // Since D3 doesn't support SVG resize by default,
-            // we need to manually specify parts of the graph that need to 
+            // we need to manually specify parts of the graph that need to
             // be updated on window resize
             function resizeHeatmap() {
 
@@ -1413,12 +1413,12 @@ $(function() {
                 .attr("width", width)
                 .attr("height", height)
                     .on("mouseover", function() {
-                        focusPointer.style("display", null);        
+                        focusPointer.style("display", null);
                         focusLine.style("display", null)
                         focusText.style("display", null);
                     })
                     .on("mouseout", function() {
-                        focusPointer.style("display", "none"); 
+                        focusPointer.style("display", "none");
                         focusLine.style("display", "none");
                         focusText.style("display", "none");
                     })
@@ -1465,9 +1465,9 @@ $(function() {
             $(document).on('click', '.sidebar-control', monthlySalesAreaResize);
 
             // Resize function
-            // 
+            //
             // Since D3 doesn't support SVG resize by default,
-            // we need to manually specify parts of the graph that need to 
+            // we need to manually specify parts of the graph that need to
             // be updated on window resize
             function monthlySalesAreaResize() {
 
@@ -1637,9 +1637,9 @@ $(function() {
             $(document).on('click', '.sidebar-control', messagesAreaResize);
 
             // Resize function
-            // 
+            //
             // Since D3 doesn't support SVG resize by default,
-            // we need to manually specify parts of the graph that need to 
+            // we need to manually specify parts of the graph that need to
             // be updated on window resize
             function messagesAreaResize() {
 

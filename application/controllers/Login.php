@@ -161,6 +161,16 @@ Class Login extends CLCMS_Controller {
         }
     }
 
+    public function account_confirm($code)
+    {
+        //check does activation code exists!
+        $this->load->model('User');
+        $this->User->activate_user($code);
+
+        $this->session->set_flashdata('message', 'Uspjesno ste aktivirali nalog. Prijavite se.');
+        redirect('login');
+    }
+
 
     /***************************
      * Call backs

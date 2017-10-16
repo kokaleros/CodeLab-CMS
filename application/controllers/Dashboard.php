@@ -6,7 +6,14 @@ class Dashboard extends CLCMS_Controller {
 	public function index()
 	{
         $this->required_login();
-        $this->load->view('layouts/welcome_message');
+
+        $data['user'] = $this->get_current_user_data();
+        $data['header'] = array(
+            'title'     => 'Dashboard',
+            'css'       => array( 'custom.css' ) //assets/css/custom.css
+        );
+
+        $this->loadTemplate('dashboard', $data);
 	}
 
 

@@ -19,6 +19,14 @@ Class CLCMS_Controller extends CI_Controller{
         }
     }
 
+    public function get_current_user_data(){
+        if($this->is_logged_in == false){
+            return false;
+        }
+
+        return $this->session->get_userdata();
+    }
+
     // login user and set session
     public function user_login($used_data){
 
@@ -32,6 +40,13 @@ Class CLCMS_Controller extends CI_Controller{
         $session_data = array(
             'user_id'   => $used_data->id,
             'username'  => $used_data->username,
+            'full_name' => $used_data->name,
+            'location_info' =>
+                array(
+                    'address'   => $used_data->address,
+                    'city'      => $used_data->city,
+                    'country'   => $used_data->country
+                ),
             'logged_in' => true,
             'is_admin'  => 1
         );
@@ -41,7 +56,7 @@ Class CLCMS_Controller extends CI_Controller{
 
     // User logout and delete session
     public function user_logout(){
-        $unset_data = array("user_id","user_name","is_admin");
+        $unset_data = array("user_id","user_name","is_admin","full_name","location_info");
 
         $this->session->unset_userdata($unset_data);
         $this->session->set_userdata(array("logged_in" => false));
@@ -63,5 +78,27 @@ Class CLCMS_Controller extends CI_Controller{
 
         return $this->is_logged_in;
     }
+
+
+
+
+    //Template engine
+    public function loadTemplate($type = '', $data){
+        $default_type   = "dashboard";
+        empty($type) ? $type = $default_type : null;
+
+        if($type == 'dashboard')
+        {
+            //if doesnt exist, generate it :)
+            empty($data['header']) ? $data['header'] = '' : null;
+
+            //load views
+            $this->load->view('parts/header.php', $data['header']);
+            $this->load->view('layouts/template.php',$data);
+        }
+
+
+    }
+
 
 }
