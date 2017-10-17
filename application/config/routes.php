@@ -56,3 +56,9 @@ $route['translate_uri_dashes'] = FALSE;
 $route['logout']                    = 'login/logout';
 $route['register']                  = 'login/register';
 $route['activation/([\w+]{32})']    = 'login/account_confirm/$1';
+
+$route['users']                     = 'User_Controller/index';
+$route['users/profil/(:num)']      = 'User_Controller/profile/$1';
+$route['users/edit/(:num)']         = 'User_Controller/edit/$1';
+$route['users/delete/(:num)']       = 'User_Controller/delete/$1';
+$route['users/switch/(:num)']       = 'User_Controller/switch/$1';

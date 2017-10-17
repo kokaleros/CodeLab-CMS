@@ -1,13 +1,4 @@
 <?=
-//$data = array(
-//    'name'          => 'name',
-//    'id'            => 'name',
-//    'value'         => '',
-//    'maxlength'     => '40',
-//    'size'          => '50',
-//    'style'         => 'width:50%'
-//);
-
 form_open(base_url() . "login/register")
 ?>
 

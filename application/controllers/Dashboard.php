@@ -13,6 +13,8 @@ class Dashboard extends CLCMS_Controller {
             'css'       => array( 'custom.css' ) //assets/css/custom.css
         );
 
+        $data['load_view'] = 'layouts/dashboard';
+
         $this->loadTemplate('dashboard', $data);
 	}
 

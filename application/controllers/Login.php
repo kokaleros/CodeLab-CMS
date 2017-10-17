@@ -66,7 +66,7 @@ Class Login extends CLCMS_Controller {
                 array(
                     "field" => "name",
                     "label" => "ime",
-                    "rules" => "required|min_length[5]|max_length[100]"
+                    "rules" => "required|min_length[3]|max_length[100]"
                 ),
             "username" =>
                 array(

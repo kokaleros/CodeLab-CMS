@@ -5,7 +5,7 @@ $name_field = array(
     "value"         => set_value("name"),
     "placeholder"   => "Vaše ime",
     "class"         => "form-control",
-    "minlength"     => "5",
+    "minlength"     => "3",
     "maxlength"     => "100",
     "required"      => "true"
 );

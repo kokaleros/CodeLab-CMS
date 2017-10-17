@@ -39,6 +39,33 @@ Class User extends CI_Model{
         }
     }
 
+    public function edit($id = '', $data = ''){
+        if(!is_array($data)){
+            echo "Create user: input data isnt array!";
+            return false;
+        }
+
+        $this->db->where('id',$id);
+        $result = $this->db->update($this->user_table, $data);
+
+        if($result){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function delete($id=''){
+        $this->db->where('id', $id);
+        $user_delete = $this->db->delete($this->user_table);
+
+        if($user_delete){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function user_exist($username = "",$email = ""){
         $this->db->select("id,username,email");
         $this->db->where("username", $username);
@@ -83,12 +110,28 @@ Class User extends CI_Model{
         $this->db->update($this->user_table);
     }
 
+    //User interfaces
     public function get_user_by_secret_key($secret_key){
         $this->db->where('secret',$secret_key);
         $result = $this->db->get($this->user_table);
 
         return $result->num_rows() == 1 ? true : false;
     }
+
+    public function get_user_by_id($id){
+        $this->db->where('id',$id);
+        $result = $this->db->get($this->user_table);
+
+        return $result->num_rows() == 1 ? $result->row() : false;
+    }
+
+    public function get_all_users(){
+        $this->db->order_by('id', "ASC");
+        $result = $this->db->get($this->user_table);
+
+        return $result->num_rows() > 0 ? $result->result() : false;
+    }
+
 
     //custom functions -------------------------------------------------------------
 

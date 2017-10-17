@@ -13,7 +13,11 @@ Class CLCMS_Controller extends CI_Controller{
     public $is_logged_in = false;
 
     //check is current page requoire login
-    protected function required_login($redirect_url = ''){
+    protected function required_login($redirect_url = '', $message = ''){
+        if( $message != '') {
+            $this->session->set_flashdata('message', $message);
+        }
+
         if( $this->is_logged_in() == false ){
             redirect('/login/');
         }
@@ -80,12 +84,13 @@ Class CLCMS_Controller extends CI_Controller{
     }
 
 
-
-
     //Template engine
     public function loadTemplate($type = '', $data){
         $default_type   = "dashboard";
+        $default_view   = 'layouts/dashboard';
+
         empty($type) ? $type = $default_type : null;
+        empty($data['load_view']) ? $data['load_view'] = $default_view : null;
 
         if($type == 'dashboard')
         {
@@ -94,7 +99,7 @@ Class CLCMS_Controller extends CI_Controller{
 
             //load views
             $this->load->view('parts/header.php', $data['header']);
-            $this->load->view('layouts/template.php',$data);
+            $this->load->view('layouts/template.php',array('data' => $data));
         }
 
 
