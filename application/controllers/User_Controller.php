@@ -7,7 +7,10 @@ Class User_Controller extends CLCMS_Controller
     {
         parent::__construct();
 
-        $this->required_login('/login/', 'Da biste koristili ovaj dio morate biti prijavljeni!');
+        $this->required_login('/login/', 'Da biste koristili ovaj dio morate biti prijasvljeni!', 'danger');
+
+        //load users helper
+        $this->load->helper('form_rules/user_rules_helper');
 
         //load models
         $this->load->model("User");
@@ -62,66 +65,7 @@ Class User_Controller extends CLCMS_Controller
             die('Unknown user id!');
         }
 
-        $rules = array(
-            "name" =>
-                array(
-                    "field" => "name",
-                    "label" => "ime",
-                    "rules" => "required|min_length[3]|max_length[100]"
-                ),
-            "email" =>
-                array(
-                    "field" => "email",
-                    "label" => "email",
-                    "rules" => "required|min_length[7]|max_length[100]|valid_email"
-                ),
-            "password" =>
-                array(
-                    "field" => "password",
-                    "label" => "lozinka",
-                    "rules" => "required|min_length[6]|max_length[32]"
-                ),
-            "password_conf" =>
-                array(
-                    "field" => "password_conf",
-                    "label" => "ponovi lozinku",
-                    "rules" => "required|min_length[6]|max_length[32]|matches[password]"
-                ),
-
-            //additional fields that are not required
-
-            "telephone" =>
-                array(
-                    "field" => "telephone",
-                    "label" => "Telefon",
-                    "rules" => "max_length[25]"
-                ),
-            "address" =>
-                array(
-                    "field" => "address",
-                    "label" => "Adresa",
-                    "rules" => "max_length[100]"
-                ),
-            "city" =>
-                array(
-                    "field" => "telephone",
-                    "label" => "Telefon",
-                    "rules" => "max_length[100]"
-                ),
-            "country" =>
-                array(
-                    "field" => "country",
-                    "label" => "Drzava",
-                    "rules" => "max_length[100]"
-                ),
-            "zip_code" =>
-                array(
-                    "field" => "zip_code",
-                    "label" => "Postanski broj",
-                    "rules" => "max_length[10]"
-                )
-        );
-
+        $rules = user_edit_rules();
         $this->form_validation->set_rules($rules);
 
         //if validation isnt OK, load view!
@@ -136,7 +80,7 @@ Class User_Controller extends CLCMS_Controller
 
 
             $data['header'] = array(
-                'title'     => 'Uredi korisnika: ' . $data['profil']->username,
+                'title'     => 'Uredi korisnika / ' . $data['profil']->username,
                 'js'        => array('plugins/forms/styling/uniform.min.js','pages/form_inputs.js')
             );
 
@@ -154,9 +98,46 @@ Class User_Controller extends CLCMS_Controller
             $user = $this->User->edit($id, $postData);
 
             if(!$user){
-                die('User isnt edited!');
+                $this->redirect_with_message('/users/edit/'.$id, 'Promjene nisu snimljen!', 'danger');
             }else{
-                die("User with id is edited: " . $id);
+                $this->redirect_with_message('/users/edit/'.$id, 'Promjene su uspjesno snimljene!', 'success');
+            }
+        }
+
+    }
+
+    public function create(){
+        //load rules
+        $rules = user_register_rules();
+        $this->form_validation->set_rules($rules);
+
+        //if validation isnt OK, load view!
+        if( $this->form_validation->run() != true ){
+            //get user profile
+            $data['user']   = $this->get_current_user_data();
+
+            $data['header'] = array(
+                'title'     => 'Dodaj korisnika',
+                'js'        => array('plugins/forms/styling/uniform.min.js','pages/form_inputs.js')
+            );
+
+            $data['load_view'] = 'layouts/users/user_create';
+
+            $this->loadTemplate('dashboard', $data);
+
+
+        }else{
+            //provjeri pristupne podatke
+            $postData = $this->input->post();
+
+            //unset password confirmation field
+            unset($postData["password_conf"]);
+            $user = $this->User->create($postData);
+
+            if(!$user){
+                $this->redirect_with_message('/users/', 'Novi korisnik nije kreiran!!', 'danger');
+            }else{
+                $this->redirect_with_message('/users/', 'Novi korisnik je uspjesno kreiran!', 'success');
             }
         }
 
@@ -170,12 +151,41 @@ Class User_Controller extends CLCMS_Controller
         $delete = $this->User->delete($id);
 
         if($delete){
-            $this->do_redirection('users', 'Korisnik (id ' . $id . ') je uspjesno ukonjen');
+            $this->redirect_with_message('/users', 'Korisnik (id ' . $id . ') je uspjesno izbrisan', 'success');
         }
 
     }
 
     public function switch_user($id = ''){
         var_dump($id);
+    }
+
+    /***************************
+     * Call backs
+     */
+    public function username_exist($input){
+
+        $this->load->model('User');
+        $result = $this->User->user_exist($input, '');
+
+        if($result == false){
+            return true;
+        }else{
+            $this->form_validation->set_message('username_exist','Username is taken!');
+            return false;
+        }
+    }
+
+    public function email_exist($input){
+
+        $this->load->model('User');
+        $result = $this->User->user_exist('', $input);
+
+        if($result == false){
+            return true;
+        }else{
+            $this->form_validation->set_message('email_exist','Email is taken!');
+            return false;
+        }
     }
 }

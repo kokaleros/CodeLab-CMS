@@ -58,7 +58,21 @@ $route['register']                  = 'login/register';
 $route['activation/([\w+]{32})']    = 'login/account_confirm/$1';
 
 $route['users']                     = 'User_Controller/index';
-$route['users/profil/(:num)']      = 'User_Controller/profile/$1';
+$route['users/create']              = 'User_Controller/create';
+$route['users/profil/(:num)']       = 'User_Controller/profile/$1';
 $route['users/edit/(:num)']         = 'User_Controller/edit/$1';
 $route['users/delete/(:num)']       = 'User_Controller/delete/$1';
 $route['users/switch/(:num)']       = 'User_Controller/switch/$1';
+
+$route['shipments']                 = 'Shipment_Controller/index';
+
+$route['shipments/create']          = 'Shipment_Controller/create';
+$route['shipments/edit/(:num)']     = 'Shipment_Controller/edit/$1';
+$route['shipments/delete/(:num)']   = 'Shipment_Controller/delete/$1';
+$route['shipments/view/(:num)']     = 'Shipment_Controller/view/$1';
+
+
+$route['shipments/notes/create/(:num)']   = 'Shipment_Controller/notes_create/$1';
+
+
+$route['tracking/(:any)']           = 'Shipment_Controller/track_package/$1';

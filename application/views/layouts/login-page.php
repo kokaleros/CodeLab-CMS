@@ -36,13 +36,23 @@ $password_field = array(
             <!-- Content area -->
             <div class="content">
 
+                <?php
+                    $alert_message  = $this->session->flashdata('message');
+                    $alert_class    = $this->session->flashdata('message-flag');
+                    if( !empty($alert_message) ):
+                ?>
+
+                <div class="alert <?php echo $alert_class ?> no-border" style="max-width: 760px; margin: 0 auto; margin-bottom: 30px;">
+                    <button type="button" class="close" data-dismiss="alert"><span>×</span><span class="sr-only">Close</span></button>
+                    <span class="text-semibold"><?php echo $alert_message ?></span>
+                </div>
+
+                <?php endif; ?>
+
                 <!-- Simple login form -->
                 <?= form_open(base_url("login")); ?>
 
                     <div class="panel panel-body login-form">
-                        <div class="text-center">
-                            <?php echo $this->session->flashdata('message'); ?>
-                        </div>
 
                         <div class="text-center">
                             <div class="icon-object border-slate-300 text-slate-300"><i class="icon-reading"></i></div>
@@ -50,7 +60,6 @@ $password_field = array(
                         </div>
 
                         <div class="form-group has-feedback has-feedback-left">
-<!--                            <input type="text" class="form-control" name="username" placeholder="Korisničko ime">-->
                             <?= form_input($username_field); ?>
                             <div class="form-control-feedback">
                                 <i class="icon-user text-muted"></i>
@@ -59,7 +68,6 @@ $password_field = array(
                         </div>
 
                         <div class="form-group has-feedback has-feedback-left">
-<!--                            <input type="password" class="form-control" name="password" placeholder="Lozinka">-->
                             <?= form_password($password_field); ?>
                             <div class="form-control-feedback">
                                 <i class="icon-lock2 text-muted"></i>
@@ -78,6 +86,7 @@ $password_field = array(
                         </div>
 
                         <div class="text-center">
+                            <a href="<?php echo base_url('register') ?>">Novi nalog</a><br>
                             <a href="#">Zaboravili ste lozinku?</a>
                         </div>
                     </div>

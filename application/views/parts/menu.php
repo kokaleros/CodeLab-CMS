@@ -8,7 +8,11 @@
                     <a href="#" class="media-left">
                     </a>
                     <div class="media-body">
-                        <span class="media-heading text-semibold"><?php echo $user['full_name']; ?></span>
+                        <span class="media-heading text-semibold">
+                            <a href="<?php echo base_url('users/profil/' . $user['user_id']) ?>" style="color: #fff;">
+                                <?php echo $user['full_name']; ?>
+                            </a>
+                        </span>
                         <div class="text-size-mini text-muted">
                             <i class="icon-pin text-size-small"></i> &nbsp;<?php echo $user['location_info']['city']; ?>, <?php echo $user['location_info']['country']; ?>
                         </div>
@@ -17,7 +21,7 @@
                     <div class="media-right media-middle">
                         <ul class="icons-list">
                             <li>
-                                <a href="#"><i class="icon-cog3"></i></a>
+                                <a href="<?php echo base_url('users/edit/' . $user['user_id']) ?>"><i class="icon-cog3"></i></a>
                             </li>
                         </ul>
                     </div>
@@ -38,17 +42,24 @@
                     <li>
                         <a href="#"><i class="icon-users"></i> <span>Korisnici</span></a>
                         <ul>
+                            <?php if($is_admin): ?>
                             <li><a href="<?php echo base_url('users/create'); ?>">Dodaj korisnika</a></li>
                             <li><a href="<?php echo base_url('users/'); ?>">Svi korisnici</a></li>
-                            <li class="navigation-divider"></li>
+                            <?php endif; ?>
 
-                            <li><a href="#">Grupe korisnika</a></li>
-                            <li><a href="#">Dodaj grupu</a></li>
-                            <li class="navigation-divider"></li>
+                            <?php if( !$is_admin): ?>
+                                <li><a href="<?php echo base_url('users/profil/' . $user["user_id"]); ?>">Moj nalog</a></li>
+                                <li><a href="<?php echo base_url('users/edit/' . $user["user_id"]); ?>">Uredi nalog</a></li>
+                            <?php endif; ?>
+                            <!--                            <li class="navigation-divider"></li>-->
 
-                            <li><a href="#">Dozvole</a></li>
-                            <li><a href="#">Dodaj dozvolu</a></li>
-                            <li><a href="#">Dozvole grupi</a></li>
+<!--                            <li><a href="#">Grupe korisnika</a></li>-->
+<!--                            <li><a href="#">Dodaj grupu</a></li>-->
+<!--                            <li class="navigation-divider"></li>-->
+<!---->
+<!--                            <li><a href="#">Dozvole</a></li>-->
+<!--                            <li><a href="#">Dodaj dozvolu</a></li>-->
+<!--                            <li><a href="#">Dozvole grupi</a></li>-->
                         </ul>
                     </li>
 
@@ -56,8 +67,8 @@
                     <li>
                         <a href="#"><i class="icon-stack2"></i> <span>Pošiljke</span></a>
                         <ul>
-                            <li><a href="#">Sve pošiljke</a></li>
-                            <li><a href="#">Dodaj pošiljku</a></li>
+                            <li><a href="<?php echo base_url('shipments'); ?>">Sve pošiljke</a></li>
+                            <li><a href="<?php echo base_url('shipments/create'); ?>">Dodaj pošiljku</a></li>
                         </ul>
                     </li>
                     <li>

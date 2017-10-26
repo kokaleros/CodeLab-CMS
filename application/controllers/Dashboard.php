@@ -17,6 +17,4 @@ class Dashboard extends CLCMS_Controller {
 
         $this->loadTemplate('dashboard', $data);
 	}
-
-
 }

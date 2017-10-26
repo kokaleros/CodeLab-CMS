@@ -194,7 +194,7 @@
                     <li><a href="#"><i class="icon-user-plus"></i> Podešavanja</a></li>
                     <li><a href="#"><span class="badge bg-teal-400 pull-right">58</span> <i class="icon-comment-discussion"></i> Poruke</a></li>
                     <li class="divider"></li>
-                    <li><a href="#"><i class="icon-cog5"></i> Moj nalog</a></li>
+                    <li><a href="<?php echo base_url('users/edit/' . $user['user_id']) ?>"><i class="icon-cog5"></i> Moj nalog</a></li>
                     <li><a href="#"><i class="icon-switch2"></i> Odjavi se</a></li>
                 </ul>
             </li>
